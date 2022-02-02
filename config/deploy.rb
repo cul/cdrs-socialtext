@@ -24,5 +24,5 @@ set :title, 'CDRS Social Text'
 
 set :wp_custom_themes, {
   'cdrs-ST' => 'wp-content/themes/cdrs-ST',
-  'twentysixteen' => 'wp-content/themes/twentysixteen'
+  'twentysixteen-frozen' => 'wp-content/themes/twentysixteen-frozen'
 }
