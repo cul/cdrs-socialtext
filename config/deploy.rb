@@ -23,6 +23,5 @@ set :title, 'CDRS Social Text'
 # List custom plugins and themes to pull in from repo
 
 set :wp_custom_themes, {
-  'cdrs-ST' => 'wp-content/themes/cdrs-ST',
-  'twentysixteen-frozen' => 'wp-content/themes/twentysixteen-frozen'
+  'cdrs-ST' => 'wp-content/themes/cdrs-ST'
 }
