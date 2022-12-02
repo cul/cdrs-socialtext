@@ -25,3 +25,5 @@ set :title, 'CDRS Social Text'
 set :wp_custom_themes, {
   'cdrs-ST' => 'wp-content/themes/cdrs-ST'
 }
+
+before 'cul:wp:deploy:create_symlinks', 'cul:wp:deploy:symlink_wflogs_to_var_directory'
