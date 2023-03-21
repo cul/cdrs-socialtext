@@ -73,19 +73,16 @@
 
 <?php wp_footer(); ?>
 
-<script type="text/javascript">
-var _gaq = _gaq || [];
-_gaq.push(
-['_setAccount', 'UA-27720752-7'],
-['_trackPageview'],
-['aggregate._setAccount', 'UA-27720752-4'],
-['aggregate._trackPageview']
-);
-(function() {
-var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
+<!-- Google tag (gtag.js) -->
+<script async src=""https://www.googletagmanager.com/gtag/js?id=UA-27720752-7""></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-27720752-7');
+  gtag('config', 'UA-27720752-4');
+  gtag('config', 'G-S4Q4WYZVKJ');
 </script>
 
 </body>
