@@ -73,17 +73,5 @@
 
 <?php wp_footer(); ?>
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-27720752-7"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-27720752-7');
-  gtag('config', 'UA-27720752-4');
-  gtag('config', 'G-S4Q4WYZVKJ');
-</script>
-
 </body>
 </html>

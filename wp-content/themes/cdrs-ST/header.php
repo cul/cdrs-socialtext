@@ -18,6 +18,25 @@
 	<?php if ( is_singular() && pings_open( get_queried_object() ) ) : ?>
 	<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
 	<?php endif; ?>
+
+	<?php
+	if($_SERVER['SERVER_NAME'] == 'socialtextjournal.org') {
+	    ?>
+
+		<!-- Google tag (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-27720752-7"></script>
+		<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-27720752-7');
+		gtag('config', 'UA-27720752-4');
+		gtag('config', 'G-S4Q4WYZVKJ');
+		</script>
+
+	<?php } ?>
+
 	<?php wp_head(); ?>
 </head>
 
