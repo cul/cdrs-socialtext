@@ -16,9 +16,24 @@
 			<h2 class="widget-title">Periscope Archive</h2>	
 
 <?php
-$page = get_page_by_title('Periscope Archive Sidebar');
-$content = apply_filters('the_content', $page->post_content);
-echo $content;
+
+$query = new WP_Query(array(
+  'post_type' => 'page',
+  'title' => 'Periscope Archive Sidebar',
+  'posts_per_page' => 1
+));
+
+if ( $query->have_posts() ) {
+  while ( $query->have_posts() ) {
+      $query->the_post();
+      $content = apply_filters('the_content', get_the_content());
+      echo $content;
+  }
+  wp_reset_postdata();
+} else {
+  echo 'Page not found';
+}
+
 ?>
 
 			</div>

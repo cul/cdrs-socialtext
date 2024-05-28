@@ -20,9 +20,24 @@ get_header(); ?>
 				<div class="editors-info">
 				<h1 class="page-title editors-title">Editor's Blog</h1>
 				<?php
-				$page = get_page_by_title('Anna Intro Text');
-				$content = apply_filters('the_content', $page->post_content);
-				echo $content;
+        
+        $query = new WP_Query(array(
+          'post_type' => 'page',
+          'title' => 'Anna Intro Text',
+          'posts_per_page' => 1
+        ));
+
+        if ( $query->have_posts() ) {
+          while ( $query->have_posts() ) {
+              $query->the_post();
+              $content = apply_filters('the_content', get_the_content());
+              echo $content;
+          }
+          wp_reset_postdata();
+        } else {
+          echo 'Page not found';
+        }
+
 				?>
 				<span class="byline"><!--<em>By</em> &nbsp;-->Anna McCarthy, Web Editor</span>
 				
