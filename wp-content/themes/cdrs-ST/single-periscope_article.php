@@ -105,7 +105,7 @@ $taxlink = get_term_link($taxid);
 
 
     <?php
-
+  $periscope_topic = '';
 	$topic = get_term( $taxid, $periscope_topic );
 	$per_title = $topic->name;
 	$per_link = get_term_link($topic);
