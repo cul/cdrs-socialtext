@@ -10,6 +10,7 @@
 
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'content-list clear' ); ?>>
 <?php
+        $sub = '';
 				if ( get_field('misc_article_subtitle') != "" ) {
 				$subtitle = get_field('misc_article_subtitle');
 				$sub = '<span class="feed_item_subtitle">';

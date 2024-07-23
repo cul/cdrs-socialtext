@@ -15,15 +15,19 @@ foreach ($topics as $topic) {
 
 
 	$topicValues = array();
-	$topicValues[topic] = $topic;
-	$src = get_tax_meta($topic->term_id, 'st_item_feature_image');
-	$topicValues[img_src] = $src[src];
-	$topicValues[thmb_src] = z_taxonomy_image_url($topic->term_id, 'single-image');
-	$topicValues[description] = get_tax_meta($topic->term_id, 'st_item_description');
-	$topicValues[link] = get_term_link($topic);
-	$topicValues[title] = $topic->name;
-	$topicValues[articles_count] = $topic->count;
-	$topicValues[show_link] = true;
+	$topicValues['topic'] = $topic;
+  $src = get_tax_meta($topic->term_id, 'st_item_feature_image');
+  if (is_array($src) && isset($src['src'])) {
+      $topicValues['img_src'] = $src['src'];
+  } else {
+      $topicValues['img_src'] = ''; 
+  }
+	$topicValues['thmb_src'] = z_taxonomy_image_url($topic->term_id, 'single-image');
+	$topicValues['description'] = get_tax_meta($topic->term_id, 'st_item_description');
+	$topicValues['link'] = get_term_link($topic);
+	$topicValues['title'] = $topic->name;
+	$topicValues['articles_count'] = $topic->count;
+	$topicValues['show_link'] = true;
 
 	array_push($showTopics, $topicValues);
 
