@@ -7,7 +7,7 @@
  *
  */
 
-     $topics = get_terms('periscope_topic', 'hide_empty');
+  $topics = get_terms('periscope_topic', 'orderby=term_id&order=DESC&hide_empty');
 
 $max = 4;
         $showTopics = array();
