@@ -100,7 +100,7 @@ if ( $st_sidejournal_query->have_posts() ) {
 
   <?php wp_reset_postdata();
 	
-	$topics = get_terms('periscope_topic', 'number=1&orderby=term_id&order=DESC&hide_empty');
+	$topics = get_terms('periscope_topic', 'number=1&hide_empty');
 	foreach ($topics as $topic) {
 
 	$per_title = $topic->name;
