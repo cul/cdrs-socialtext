@@ -164,83 +164,67 @@ function socialtext_color_options_sections( $wp_customize ) {
       'description' => __( 'Header background and logo colors', 'twentysixteen-child' ),
      ) );
 
+     /**
+     * Add a Setting/Control to change the header background color
+     */
+     $wp_customize->add_setting( 'stx_header_color', array(
+       'default'           => '#c9c585',
+       'sanitize_callback' => 'sanitize_hex_color',
+     ) );
+     $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'stx_header_color', array(
+       'label'       => __( 'Header Background Color', 'twentysixteen-child' ),
+       'description' => __( 'Background color for the site header', 'twentysixteen-child' ),
+       'section'     => 'stx_colors',
+       'priority'    => 10,
+     ) ) );
 
-     //More code to come
+     /**
+     * Add a Setting/Control to change the logo and menu item color
+     */
+     $wp_customize->add_setting( 'stx_logo_color', array(
+       'default'           => '#00404f',
+       'sanitize_callback' => 'sanitize_hex_color',
+     ) );
+     $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'stx_logo_color', array(
+       'label'       => __( 'Logo Color', 'twentysixteen-child' ),
+       'description' => __( 'Color for the site logo and main menu text', 'twentysixteen-child' ),
+       'section'     => 'stx_colors',
+       'priority'    => 10,
+     ) ) );
+
+     /**
+     * Add a Setting/Control to change the menu item hover color
+     */
+     $wp_customize->add_setting( 'stx_menu_hover', array(
+       'default'           => '#686868',
+       'sanitize_callback' => 'sanitize_hex_color',
+     ) );
+     $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'stx_menu_hover', array(
+       'label'       => __( 'Menu Hover Color', 'twentysixteen-child' ),
+       'description' => __( 'Color for main menu text on hover', 'twentysixteen-child' ),
+       'section'     => 'stx_colors',
+       'priority'    => 10,
+     ) ) );
     }
     add_action( 'customize_register', 'socialtext_color_options_sections' );
 
 
-function socialtext_color_fields( $fields ) {
-      /**
-    * Add a Field to change the header background color
-    */
-    $fields[] = array(
-      'type'        => 'color',
-      'settings'     => 'stx_header_color',
-      'label'       => __( 'Header Background Color', 'twentysixteen-child' ),
-      'description' => __( 'Background color for the site header', 'twentysixteen-child' ),
-      'section'     => 'stx_colors',
-      'priority'    => 10,
-      'default'     => '#c9c585',
-      'output'      => array(
-        array(
-          'element'  => '#header-container',
-          'property' => 'background-color'
-		  )
-        ),
-    );
-     /**
-    * Add a Field to change the logo and menu item color
-    */
-    $fields[] = array(
-      'type'        => 'color',
-      'settings'     => 'stx_logo_color',
-      'label'       => __( 'Logo Color', 'twentysixteen-child' ),
-      'description' => __( 'Color for the site logo and main menu text', 'twentysixteen-child' ),
-      'section'     => 'stx_colors',
-      'priority'    => 10,
-      'default'     => '#00404f',
-      'output'      => array(
-        array(
-          'element'  => '.logosvg',
-          'property' => 'fill'
-		  ),
-        array(
-          'element'  => '.main-navigation a',
-          'property' => 'color'
-		  ),
-        array(
-          'element'  => '.site-strapline',
-          'property' => 'color'
-		  ),
-        ),
-    );
-     /**
-    * Add a Field to change the menu item hover color
-    */
-    $fields[] = array(
-      'type'        => 'color',
-      'settings'     => 'stx_menu_hover',
-      'label'       => __( 'Menu Hover Color', 'twentysixteen-child' ),
-      'description' => __( 'Color for main menu text on hover', 'twentysixteen-child' ),
-      'section'     => 'stx_colors',
-      'priority'    => 10,
-      'default'     => '#686868',
-      'output'      => array(
-        array(
-          'element'  => '.main-navigation li:hover > a',
-          'property' => 'color'
-		  ),
-        array(
-          'element'  => '.main-navigation button.search-submit:hover',
-          'property' => 'background-color'
-		  ),
-        ),
-    );
-
-      return $fields;
-    }
-    add_filter( 'kirki/fields', 'socialtext_color_fields' );
+function socialtext_color_output_css() {
+    $header_color = get_theme_mod( 'stx_header_color', '#c9c585' );
+    $logo_color   = get_theme_mod( 'stx_logo_color', '#00404f' );
+    $hover_color  = get_theme_mod( 'stx_menu_hover', '#686868' );
+    ?>
+    <style type="text/css">
+        #header-container { background-color: <?php echo esc_html( $header_color ); ?>; }
+        .logosvg { fill: <?php echo esc_html( $logo_color ); ?>; }
+        .main-navigation a { color: <?php echo esc_html( $logo_color ); ?>; }
+        .site-strapline { color: <?php echo esc_html( $logo_color ); ?>; }
+        .main-navigation li:hover > a { color: <?php echo esc_html( $hover_color ); ?>; }
+        .main-navigation button.search-submit:hover { background-color: <?php echo esc_html( $hover_color ); ?>; }
+    </style>
+    <?php
+}
+add_action( 'wp_head', 'socialtext_color_output_css' );
 
 
 if ( ! function_exists('custom_editorsblog') ) {
