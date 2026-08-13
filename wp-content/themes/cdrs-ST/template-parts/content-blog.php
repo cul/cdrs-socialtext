@@ -41,7 +41,7 @@
 				}
 ?>
 	<header class="entry-header">
-		<h2 class="content-list-title entry-title"><a href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?><?php echo $sub; ?></a></h2>
+		<h2 class="content-list-title entry-title"><a href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?><?php echo wp_kses_post( $sub ); ?></a></h2>
 
 			<span class="feed_item_cat">
 				<?php if ( function_exists( 'coauthors_posts_links' ) )
@@ -83,7 +83,7 @@
 		?>
 
 				<span class="feed_item_details">
-				<span class="feed_item_author"><time class="feed_item_date" datetime=""><?php the_time('F j, Y'); ?></time><?php if ( !is_tax( 'periscope_topic' ) ) { ?> | <a href="<?php echo esc_url( $catlink ); ?>"><?php echo $catname; ?></a>
+				<span class="feed_item_author"><time class="feed_item_date" datetime=""><?php the_time('F j, Y'); ?></time><?php if ( !is_tax( 'periscope_topic' ) ) { ?> | <a href="<?php echo esc_url( $catlink ); ?>"><?php echo esc_html( $catname ); ?></a>
 				<?php } ?></span>
 
 	</div><!-- .entry-content -->

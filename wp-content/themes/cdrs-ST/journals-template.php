@@ -60,12 +60,12 @@ if ( $st_journal_query->have_posts() ) {
 			$j_linktext = get_field('journal_link_text');
 ?>
 			
-			<span class="feed_item_title">Issue <?php the_field('journal_issue_number'); ?> | <?php echo $j_title; ?></span>
+			<span class="feed_item_title">Issue <?php the_field('journal_issue_number'); ?> | <?php echo esc_html( $j_title ); ?></span>
 
 			<p class="toggleshow">Show / Hide details</p>
-			<div class="journal-archive-container togglehide clear"><?php echo $j_image; ?><div class="journal-archive-details">
-				<div class="feed_item_excerpt"><?php echo $j_content_format; ?></div>
-			<span class="feed_item_details journal_links"><a href="<?php echo $j_url; ?>"><?php echo $j_linktext; ?></a></span>
+			<div class="journal-archive-container togglehide clear"><?php echo wp_kses_post( $j_image ); ?><div class="journal-archive-details">
+				<div class="feed_item_excerpt"><?php echo wp_kses_post( $j_content_format ); ?></div>
+			<span class="feed_item_details journal_links"><a href="<?php echo esc_url( $j_url ); ?>"><?php echo esc_html( $j_linktext ); ?></a></span>
 				</div>
 			</div>
 

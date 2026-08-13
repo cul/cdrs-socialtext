@@ -32,7 +32,7 @@ $taxlink = get_term_link($taxid);
 ?>
 
 	<div class="article-info-box clear">
-		<div class="periscope-att clear"><span class="feed_item_cat">From: <a href="<?php echo $taxlink; ?>"><?php echo $taxname; ?></a></span></div>
+		<div class="periscope-att clear"><span class="feed_item_cat">From: <a href="<?php echo esc_url( $taxlink ); ?>"><?php echo esc_html( $taxname ); ?></a></span></div>
 		<div class="article-info">
 			<div class="article-info-content">
 <!--				<span class="article-type">Online Feature</span>  -->
@@ -118,9 +118,9 @@ $taxlink = get_term_link($taxid);
 			<h2 class="widget-title">Table of Contents</h2>
 <?php 	if (is_singular()) { ?>
 		<div class="side-periscope">
-			<img src="<?php echo $per_src; ?>" />
-			<a href="<?php echo $per_link; ?>" class="feed_item_title">
-			<?php echo $per_title; ?>
+			<img src="<?php echo esc_url( $per_src ); ?>" />
+			<a href="<?php echo esc_url( $per_link ); ?>" class="feed_item_title">
+			<?php echo esc_html( $per_title ); ?>
 			</a>
 		</div>
 <?php 	} ?>

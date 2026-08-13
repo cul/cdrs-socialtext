@@ -20,7 +20,7 @@
 	<?php endif; ?>
 
 	<?php
-	if($_SERVER['SERVER_NAME'] == 'socialtextjournal.org') {
+	if ( isset( $_SERVER['SERVER_NAME'] ) && $_SERVER['SERVER_NAME'] === 'socialtextjournal.org' ) {
 	    ?>
 
 		<!-- Google tag (gtag.js) -->
@@ -58,7 +58,7 @@
 <div id="page" class="site">
 	<div id="header-container">
 	<div class="site-inner">
-		<a class="skip-link screen-reader-text" href="#content"><?php _e( 'Skip to content', 'twentysixteen' ); ?></a>
+		<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'twentysixteen' ); ?></a>
 
 		<header id="masthead" class="site-header" role="banner">
 			<div class="site-header-main">
@@ -69,23 +69,23 @@
 						<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php get_template_part('images/inline', 'STX_wordmark.svg'); ?></a>
 					<?php else : ?>
 						<p class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php get_template_part('images/inline', 'STX_wordmark.svg'); ?></a></p>
-						<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php echo file_get_contents($logofile); ?></a>
+						<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php echo file_get_contents( $logofile ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $logofile is a static path to the theme's own bundled SVG asset, not user input. ?></a>
 					<?php endif;
 
 					$description = get_bloginfo( 'description', 'display' );
 					if ( $description || is_customize_preview() ) : ?>
-						<p class="site-description"><?php echo $description; ?></p>
+						<p class="site-description"><?php echo esc_html( $description ); ?></p>
 					<?php endif; ?>
 					<span class="site-strapline">Online</span>
 				</div><!-- .site-branding -->
 
 				<?php if ( has_nav_menu( 'primary' ) || has_nav_menu( 'social' ) ) : ?>
-					<button id="menu-toggle" class="menu-toggle"><?php _e( 'Menu', 'twentysixteen' ); ?></button>
+					<button id="menu-toggle" class="menu-toggle"><?php esc_html_e( 'Menu', 'twentysixteen' ); ?></button>
 
 					<div id="site-header-menu" class="site-header-menu">
 
 						<div id="header-social-container">
-							<span class="social-icon twitter-icon"><a href="https://twitter.com/stcollective"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/twitter.png" /></a></span><span class="social-icon facebook-icon"><a href="https://www.facebook.com/socialtext.journal.7"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/facebook.png" /></a></span>
+							<span class="social-icon twitter-icon"><a href="https://twitter.com/stcollective"><img src="<?php echo esc_url( get_stylesheet_directory_uri() ); ?>/images/twitter.png" /></a></span><span class="social-icon facebook-icon"><a href="https://www.facebook.com/socialtext.journal.7"><img src="<?php echo esc_url( get_stylesheet_directory_uri() ); ?>/images/facebook.png" /></a></span>
 						</div>
 
 						<?php if ( has_nav_menu( 'primary' ) ) : ?>

@@ -54,9 +54,9 @@ get_header(); ?>
 		<div class="article-no-image">
 			<div class="article-no-image-content">	
 	<?php } ?>
-				<?php echo '<p>' . $curauth->user_description . '</p>';
+				<?php echo '<p>' . esc_html( $curauth->user_description ) . '</p>';
 				if ( $curauth->user_url != '' ) { ?>
-				<p class="weblink"><em>Website:</em> &nbsp;<a href="<?php echo $curauth->user_url; ?>"><?php echo $curauth->user_url; ?></a></p>
+				<p class="weblink"><em>Website:</em> &nbsp;<a href="<?php echo esc_url( $curauth->user_url ); ?>"><?php echo esc_html( $curauth->user_url ); ?></a></p>
 				<?php } ?>
 			</div>
 		</div>
@@ -64,7 +64,7 @@ get_header(); ?>
 	
 <?php } ?>
 	
-	<h3 class="author-articles-header">Authored by <?php echo $curauth->display_name; ?></h3>
+	<h3 class="author-articles-header">Authored by <?php echo esc_html( $curauth->display_name ); ?></h3>
 
 			<?php
 			// Start the Loop.

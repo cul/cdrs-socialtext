@@ -133,17 +133,17 @@ get_header(); ?>
 		<div class="home-section-one site-content clear">
 
 		<div class="home-first-post">
-			<?php echo $homefirstpost; ?>
+			<?php echo wp_kses_post( $homefirstpost ); ?>
 		</div>
 
 		<div class="home-periscope clear">
-			<img src="<?php echo $per_src; ?>" />
+			<img src="<?php echo esc_url( $per_src ); ?>" />
 			<div class="home-periscope-details">
 			<div class="home-per-strap"><h4>Periscope: Critical Perspectives on Contemporary Issues</h4></div>
 			<div class="home-per-details-inner">
-			<a href="<?php echo $per_link; ?>" class="feed_item_title"><?php echo $per_title; ?></a>
-			<div class="feed_item_excerpt"><p><?php echo $per_trimmed; ?></p></div>
-			<ul class="per_home_links"><li><a href="<?php echo $per_link; ?>">Browse this Periscope (<?php echo $per_count; ?> Articles)</a></li><li><a href="<?php echo site_url(); ?>/periscope/">Periscope Archives</a></li></ul>
+			<a href="<?php echo esc_url( $per_link ); ?>" class="feed_item_title"><?php echo esc_html( $per_title ); ?></a>
+			<div class="feed_item_excerpt"><p><?php echo esc_html( $per_trimmed ); ?></p></div>
+			<ul class="per_home_links"><li><a href="<?php echo esc_url( $per_link ); ?>">Browse this Periscope (<?php echo esc_html( $per_count ); ?> Articles)</a></li><li><a href="<?php echo esc_url( site_url() ); ?>/periscope/">Periscope Archives</a></li></ul>
 			</div>
 			</div>
 		</div>
@@ -187,7 +187,7 @@ if ( $st_homejournal_query->have_posts() ) {
 
 		<div class="home-journal-contents">
 			<span class="feed_item_cat">Current Journal Issue</span>
-			<span class="feed_item_title">Issue <?php the_field('journal_issue_number'); ?> | <?php echo $j_title; ?></span>
+			<span class="feed_item_title">Issue <?php the_field('journal_issue_number'); ?> | <?php echo esc_html( $j_title ); ?></span>
 			<div class="feed_item_excerpt"><?php the_content(); ?></div>
 			<span class="feed_item_details journal_links"><a href="<?php the_field('journal_url'); ?>"><?php the_field('journal_link_text'); ?></a></span>
 		</div>
@@ -221,7 +221,7 @@ if ( $st_homejournal_query->have_posts() ) {
 	<div id="primary" class="content-area">
 		<main id="main" class="site-main" role="main">
 
-			<?php echo $homepostblock; ?>
+			<?php echo wp_kses_post( $homepostblock ); ?>
 
 		</main><!-- .site-main -->
 	</div><!-- .content-area -->

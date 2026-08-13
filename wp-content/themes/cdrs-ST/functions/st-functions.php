@@ -58,7 +58,7 @@ if (is_admin()){
 function remove_cat_tag_description(){
     global $current_screen;
 
-    echo $current_screen->id;
+    echo esc_html( $current_screen->id );
     switch ( $current_screen->id )
     {
         case 'edit-issue':

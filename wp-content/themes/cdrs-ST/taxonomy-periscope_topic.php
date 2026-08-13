@@ -17,12 +17,12 @@ get_header(); ?>
 			<header class="entry-header tax-header">
 
 			<h1 class="entry-title">
-				<?php $term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) ); echo $term->name;
+				<?php $term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) ); echo esc_html( $term->name );
 	$per_src = z_taxonomy_image_url($term->term_id, 'single-image');
 
 				?>
 			</h1>
-			<img src="<?php echo $per_src; ?>" />
+			<img src="<?php echo esc_url( $per_src ); ?>" />
 				<?php
 					the_archive_description( '<div class="taxonomy-description">', '</div>' );
 				?>

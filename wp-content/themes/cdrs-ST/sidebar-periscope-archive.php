@@ -27,7 +27,7 @@ if ( $query->have_posts() ) {
   while ( $query->have_posts() ) {
       $query->the_post();
       $content = apply_filters('the_content', get_the_content());
-      echo $content;
+      echo wp_kses_post( $content );
   }
   wp_reset_postdata();
 } else {

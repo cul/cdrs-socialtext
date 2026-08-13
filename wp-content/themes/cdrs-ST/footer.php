@@ -60,7 +60,7 @@
 					do_action( 'twentysixteen_credits' );
 				?>
 				<span class="site-title">&copy; <a href="<?php echo esc_url( home_url( '|' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?> Collective</a></span>
-				<?php echo date("Y"); ?>
+				<?php echo esc_html( date( 'Y' ) ); ?>
 				</div>
 				<div class="site-footer-nav">
 					<?php wp_nav_menu( array( 'theme_location' => 'footer_one' ) ); ?>
