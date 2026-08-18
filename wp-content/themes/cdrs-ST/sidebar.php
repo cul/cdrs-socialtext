@@ -83,7 +83,7 @@ if ( $st_sidejournal_query->have_posts() ) {
 ?>	
 		<section id="current_journal" class="widget widget_current_journal">		
 			<h2 class="widget-title">Current Journal Issue</h2>	
-			<a href="<?php the_field('journal_url'); ?>"><span class="feed_item_title">Issue <?php the_field('journal_issue_number'); ?> | <?php echo $j_title; ?></span></a>
+			<a href="<?php the_field('journal_url'); ?>"><span class="feed_item_title">Issue <?php the_field('journal_issue_number'); ?> | <?php echo esc_html( $j_title ); ?></span></a>
 		<div class="side-journal-cover">
 		<?php if ( has_post_thumbnail() ) { ?>
 			<a href="<?php the_field('journal_url'); ?>"><?php the_post_thumbnail('journal-feat'); ?></a>
@@ -117,9 +117,9 @@ if ( $st_sidejournal_query->have_posts() ) {
 		<section id="current_per" class="widget widget_current_per">		
 			<h2 class="widget-title">Recent Periscope Topic</h2>	
 		<div class="side-periscope">
-			<a href="<?php echo $per_link; ?>"><img src="<?php echo $per_src; ?>" /></a>
-			<a href="<?php echo $per_link; ?>" class="feed_item_title"><?php echo $per_title; ?></a>
-<span class="per_home_links"><a href="<?php echo $per_link; ?>">Browse this Periscope (<?php echo $per_count; ?> Articles)</a></span>
+			<a href="<?php echo esc_url( $per_link ); ?>"><img src="<?php echo esc_url( $per_src ); ?>" /></a>
+			<a href="<?php echo esc_url( $per_link ); ?>" class="feed_item_title"><?php echo esc_html( $per_title ); ?></a>
+<span class="per_home_links"><a href="<?php echo esc_url( $per_link ); ?>">Browse this Periscope (<?php echo esc_html( $per_count ); ?> Articles)</a></span>
 		</div>
 		</section>
 		
@@ -145,7 +145,7 @@ if ( $edblog_query->have_posts() ) {
 		<section id="current_ed" class="widget widget_current_per">		
 			<h2 class="widget-title">Editor's Blog</h2>	
 		<div class="side-periscope">
-			<a href="<?php echo esc_url( home_url( '/' ) ); ?>editorsblog"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/editorsblog.jpg" /></a>
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>editorsblog"><img src="<?php echo esc_url( get_stylesheet_directory_uri() ); ?>/images/editorsblog.jpg" /></a>
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>editorsblog" class="feed_item_title"><?php the_title(); ?><span class="current_ed_date"><?php the_date('F j, Y'); ?></span></a>
 		</div>
 		</section>

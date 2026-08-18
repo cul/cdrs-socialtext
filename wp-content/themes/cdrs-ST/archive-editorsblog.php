@@ -16,7 +16,7 @@ get_header(); ?>
 		<?php if ( have_posts() ) : ?>
 
 			<header class="page-header clear">
-				<img class="editors-image" src="<?php echo get_stylesheet_directory_uri(); ?>/images/anna_mccarthy_photo.jpg" />
+				<img class="editors-image" src="<?php echo esc_url( get_stylesheet_directory_uri() ); ?>/images/anna_mccarthy_photo.jpg" />
 				<div class="editors-info">
 				<h1 class="page-title editors-title">Editor's Blog</h1>
 				<?php
@@ -31,7 +31,7 @@ get_header(); ?>
           while ( $query->have_posts() ) {
               $query->the_post();
               $content = apply_filters('the_content', get_the_content());
-              echo $content;
+              echo wp_kses_post( $content );
           }
           wp_reset_postdata();
         } else {

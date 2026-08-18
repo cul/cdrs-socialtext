@@ -32,7 +32,7 @@ if ( $edblog_query->have_posts() ) {
 		<section id="current_ed" class="widget widget_current_per">
 			<h2 class="widget-title">Web Editor's Blog</h2>	
 		<div class="side-periscope">
-			<a href="<?php echo esc_url( home_url( '/' ) ); ?>editorsblog"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/editorsblog.jpg" /></a>
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>editorsblog"><img src="<?php echo esc_url( get_stylesheet_directory_uri() ); ?>/images/editorsblog.jpg" /></a>
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>editorsblog" class="feed_item_title"><?php the_title(); ?><span class="current_ed_date"><?php the_date('F j, Y'); ?></span></a>
 		</div>
 		</section>

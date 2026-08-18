@@ -20,10 +20,10 @@
 	echo '</div><div class="author-description"><h2 class="author-title">';
 
 	$userdata = get_userdata( $coauthor->ID );
-	if ( $userdata->display_name ) echo $userdata->display_name;
+	if ( $userdata->display_name ) echo esc_html( $userdata->display_name );
 
 	echo '</h2><p class="author-bio">';
-	if ( $userdata->user_description ) echo $userdata->user_description;
+	if ( $userdata->user_description ) echo esc_html( $userdata->user_description );
 
 	echo '</p></div></div><br>';
 
