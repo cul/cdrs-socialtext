@@ -33,7 +33,7 @@ get_header(); ?>
 <!-- This sets the $curauth variable -->
 
     <?php
-    $curauth = (isset($_GET['author_name'])) ? get_user_by('slug', $author_name) : get_userdata(intval($author));
+    $curauth = (isset($_GET['author_name'])) ? get_user_by('slug', sanitize_text_field( wp_unslash( $_GET['author_name'] ) )) : get_userdata(intval($author));
 
 	if ( ($curauth->user_url == '') && ($curauth->user_description == '') ) {
 	} else {

@@ -325,9 +325,14 @@ class Tax_Meta_Class {
     $field_id = isset( $_GET['field_id'] ) ? $_GET['field_id'] : 0;
     $attachment_id = isset( $_GET['attachment_id'] ) ? intval( $_GET['attachment_id'] ) : 0;
     $ok = false;
+
+    if ( ! current_user_can( 'manage_categories' ) ) {
+      die( '-1' );
+    }
+    check_admin_referer( "at-delete-mupload_" . urldecode( $field_id ) );
+
     $remove_meta_only = apply_filters("tax_meta_class_delete_image",true);
     if (strpos($field_id, '[') === false){
-      check_admin_referer( "at-delete-mupload_".urldecode($field_id));
       if ($term_id > 0)
         $this->delete_tax_meta( $term_id, $field_id );
       if (!$remove_meta_only)
