@@ -25,7 +25,11 @@
  *
  * @package Tax Meta Class
  * @deprecated replace_insert_to_post_text() @since 1.8.3
- * 
+ *
+ * NOTE: This is a locally patched vendor copy. Output escaping was added throughout
+ * (see git history, "escape Tax-meta-class output to fix WPCS security warnings") to
+ * fix stored-XSS issues absent from the original upstream release. Do not overwrite
+ * this file with a fresh copy from upstream without re-applying those fixes.
  */
 
 if ( ! class_exists( 'Tax_Meta_Class') ) :
@@ -527,15 +531,15 @@ class Tax_Meta_Class {
     // Get Plugin Path
     $plugin_path = $this->SelfPath;
     $this->show_field_begin( $field, $meta );
-    echo "<div class='at-repeat' id='{$field['id']}'>";
-    
+    echo "<div class='at-repeat' id='" . esc_attr( $field['id'] ) . "'>";
+
     $c = 0;
-        
+
       if (count($meta) > 0 && is_array($meta) ){
          foreach ($meta as $me){
            //for labling toggles
            $mmm =  ($me[$field])? $me[$field['fields'][0]['id']]: "";
-           echo '<div class="at-repater-block">'.$mmm.'<br/><table class="repeater-table" style="display: none;">';
+           echo '<div class="at-repater-block">'.esc_html( $mmm ).'<br/><table class="repeater-table" style="display: none;">';
            if ($field['inline']){
              echo '<tr class="at-inline" VALIGN="top">';
            }
@@ -568,31 +572,31 @@ class Tax_Meta_Class {
         echo '</table>
         <span class="at-re-toggle"><img src="';
            if ($this->_Local_images){
-             echo $plugin_path.'/images/edit.png';
+             echo esc_url( $plugin_path.'/images/edit.png' );
            }else{
-             echo 'http://i.imgur.com/ka0E2.png';
+             echo esc_url( 'http://i.imgur.com/ka0E2.png' );
            }
-           echo '" alt="Edit" title="Edit"/></span> 
+           echo '" alt="Edit" title="Edit"/></span>
         <img src="';
         if ($this->_Local_images){
-          echo $plugin_path.'/images/remove.png';
+          echo esc_url( $plugin_path.'/images/remove.png' );
         }else{
-          echo 'http://i.imgur.com/g8Duj.png';
+          echo esc_url( 'http://i.imgur.com/g8Duj.png' );
         }
-        echo '" alt="'.__('Remove','tax-meta').'" title="'.__('Remove','tax-meta').'" id="remove-'.$field['id'].'"></div>';
+        echo '" alt="'.esc_attr__('Remove','tax-meta').'" title="'.esc_attr__('Remove','tax-meta').'" id="remove-'.esc_attr( $field['id'] ).'"></div>';
         $c = $c + 1;
-        
+
         }
         $this->show_field_end( $field, $meta );
       }
 
     echo '<img src="';
     if ($this->_Local_images){
-      echo $plugin_path.'/images/add.png';
+      echo esc_url( $plugin_path.'/images/add.png' );
     }else{
-      echo 'http://i.imgur.com/w5Tuc.png';
+      echo esc_url( 'http://i.imgur.com/w5Tuc.png' );
     }
-    echo '" alt="'.__('Add','tax-meta').'" title="'.__('Add','tax-meta').'" id="add-'.$field['id'].'"><br/></div>';
+    echo '" alt="'.esc_attr__('Add','tax-meta').'" title="'.esc_attr__('Add','tax-meta').'" id="add-'.esc_attr( $field['id'] ).'"><br/></div>';
     
     //create all fields once more for js function and catch with object buffer
     ob_start();
@@ -622,30 +626,35 @@ class Tax_Meta_Class {
     } 
     echo '</table><img src="';
     if ($this->_Local_images){
-      echo $plugin_path.'/images/remove.png';
+      echo esc_url( $plugin_path.'/images/remove.png' );
     }else{
-      echo 'http://i.imgur.com/g8Duj.png';
+      echo esc_url( 'http://i.imgur.com/g8Duj.png' );
     }
-    echo '" alt="'.__('Remove','tax-meta').'" title="'.__('Remove','tax-meta').'" id="remove-'.$field['id'].'"></div>';
-    $counter = 'countadd_'.$field['id'];
+    echo '" alt="'.esc_attr__('Remove','tax-meta').'" title="'.esc_attr__('Remove','tax-meta').'" id="remove-'.esc_attr( $field['id'] ).'"></div>';
+    $counter = 'countadd_'.preg_replace( '/[^A-Za-z0-9_]/', '', $field['id'] );
     $js_code = ob_get_clean ();
     $js_code = str_replace("\n","",$js_code);
     $js_code = str_replace("\r","",$js_code);
     $js_code = str_replace("'","\"",$js_code);
     $js_code = str_replace("CurrentCounter","' + ".$counter." + '",$js_code);
+    // $counter is a bare JS identifier already restricted to [A-Za-z0-9_] above; $js_code is HTML
+    // assembled from the already-escaped show_field_*() output above, re-serialized for a JS string
+    // literal. esc_js()/esc_html() would corrupt both, so they're intentionally left as-is here.
+    // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
     echo '<script>
         jQuery(document).ready(function() {
-          var '.$counter.' = '.$c.';
-          jQuery("#add-'.$field['id'].'").live(\'click\', function() {
+          var '.$counter.' = '.(int) $c.';
+          jQuery("#add-'.esc_js( $field['id'] ).'").live(\'click\', function() {
             '.$counter.' = '.$counter.' + 1;
-            jQuery(this).before(\''.$js_code.'\');            
+            jQuery(this).before(\''.$js_code.'\');
             update_repeater_fields();
           });
-              jQuery("#remove-'.$field['id'].'").live(\'click\', function() {
+              jQuery("#remove-'.esc_js( $field['id'] ).'").live(\'click\', function() {
                   jQuery(this).parent().remove();
               });
           });
-        </script>';            
+        </script>';
+    // phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
     echo '<br/><style>
 .at-inline{line-height: 1 !important;}
 .at-inline .at-field{border: 0px !important;}
@@ -679,7 +688,7 @@ class Tax_Meta_Class {
     }
     if ( $field['name'] != '' || $field['name'] != FALSE ) {
       //echo "<div class='at-label'>";
-        echo "<label for='{$field['id']}'>{$field['name']}</label>";
+        echo "<label for='" . esc_attr( $field['id'] ) . "'>" . esc_html( $field['name'] ) . "</label>";
       //echo "</div>";
     }
     if ($this->_form_type == 'edit'){
@@ -699,20 +708,20 @@ class Tax_Meta_Class {
     if (isset($field['group'])){
       if ($group == 'end'){
         if ( isset($field['desc']) && $field['desc'] != '' ) {
-          echo "<div class='desc-field'>{$field['desc']}</div></td>";
+          echo "<div class='desc-field'>" . wp_kses_post( $field['desc'] ) . "</div></td>";
         } else {
           echo "</td>";
         }
       }else {
         if ( isset($field['desc']) && $field['desc'] != '' ) {
-          echo "<div class='desc-field'>{$field['desc']}</div><br/>";  
+          echo "<div class='desc-field'>" . wp_kses_post( $field['desc'] ) . "</div><br/>";
         }else{
           echo '<br/>';
-        }  
-      }    
+        }
+      }
     }else{
       if ( isset($field['desc']) && $field['desc'] != '' ) {
-        echo "<div class='desc-field'>{$field['desc']}</div>";
+        echo "<div class='desc-field'>" . wp_kses_post( $field['desc'] ) . "</div>";
       }
       if ($this->_form_type == 'edit'){
         echo '<td>';  
@@ -730,9 +739,10 @@ class Tax_Meta_Class {
    * @since 1.0
    * @access public
    */
-  public function show_field_text( $field, $meta) {  
+  public function show_field_text( $field, $meta) {
     $this->show_field_begin( $field, $meta );
-    echo "<input type='text' class='at-text' name='{$field['id']}' id='{$field['id']}' value='{$meta}' style='{$field['style']}' size='30' />";
+    // $meta is already run through esc_attr() in show() before reaching this method.
+    echo "<input type='text' class='at-text' name='" . esc_attr( $field['id'] ) . "' id='" . esc_attr( $field['id'] ) . "' value='{$meta}' style='" . esc_attr( $field['style'] ) . "' size='30' />"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     $this->show_field_end( $field, $meta );
   }
   
@@ -744,9 +754,10 @@ class Tax_Meta_Class {
    * @since 0.1.3
    * @access public
    */
-  public function show_field_hidden( $field, $meta) {  
+  public function show_field_hidden( $field, $meta) {
     //$this->show_field_begin( $field, $meta );
-    echo "<input type='hidden' class='at-text' name='{$field['id']}' id='{$field['id']}' value='{$meta}'/>";
+    // $meta is already run through esc_attr() in show() before reaching this method.
+    echo "<input type='hidden' class='at-text' name='" . esc_attr( $field['id'] ) . "' id='" . esc_attr( $field['id'] ) . "' value='{$meta}'/>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     //$this->show_field_end( $field, $meta );
   }
   
@@ -757,9 +768,9 @@ class Tax_Meta_Class {
    * @since 0.1.3
    * @access public
    */
-  public function show_field_paragraph( $field) {  
+  public function show_field_paragraph( $field) {
     //$this->show_field_begin( $field, $meta );
-    echo "<p style='{$field['style']}'>".$field['value']."</p>";
+    echo "<p style='" . esc_attr( $field['style'] ) . "'>" . wp_kses_post( $field['value'] ) . "</p>";
     //$this->show_field_end( $field, $meta );
   }
     
@@ -773,7 +784,8 @@ class Tax_Meta_Class {
    */
   public function show_field_textarea( $field, $meta ) {
     $this->show_field_begin( $field, $meta );
-      echo "<textarea class='at-textarea large-text' style='{$field['style']}' name='{$field['id']}' id='{$field['id']}' cols='60' rows='10'>{$meta}</textarea>";
+      // $meta is already run through esc_attr() in show() before reaching this method.
+      echo "<textarea class='at-textarea large-text' style='" . esc_attr( $field['style'] ) . "' name='" . esc_attr( $field['id'] ) . "' id='" . esc_attr( $field['id'] ) . "' cols='60' rows='10'>{$meta}</textarea>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     $this->show_field_end( $field, $meta );
   }
   
@@ -791,9 +803,9 @@ class Tax_Meta_Class {
       $meta = (array) $meta;
       
     $this->show_field_begin( $field, $meta );
-      echo "<select class='at-select' style='{$field['style']}' name='{$field['id']}" . ( $field['multiple'] ? "[]' id='{$field['id']}' multiple='multiple'" : "'" ) . ">";
+      echo "<select class='at-select' style='" . esc_attr( $field['style'] ) . "' name='" . esc_attr( $field['id'] ) . "" . ( $field['multiple'] ? "[]' id='" . esc_attr( $field['id'] ) . "' multiple='multiple'" : "'" ) . ">";
       foreach ( $field['options'] as $key => $value ) {
-        echo "<option value='{$key}'" . selected( in_array( $key, $meta ), true, false ) . ">{$value}</option>";
+        echo "<option value='" . esc_attr( $key ) . "'" . selected( in_array( $key, $meta ), true, false ) . ">" . esc_html( $value ) . "</option>";
       }
       echo "</select>";
     $this->show_field_end( $field, $meta );
@@ -815,7 +827,7 @@ class Tax_Meta_Class {
       
     $this->show_field_begin( $field, $meta );
       foreach ( $field['options'] as $key => $value ) {
-        echo "<input style='{$field['style']}' type='radio' class='at-radio' name='{$field['id']}' value='{$key}'" . checked( in_array( $key, $meta ), true, false ) . " /> <span class='at-radio-label'>{$value}</span>";
+        echo "<input style='" . esc_attr( $field['style'] ) . "' type='radio' class='at-radio' name='" . esc_attr( $field['id'] ) . "' value='" . esc_attr( $key ) . "'" . checked( in_array( $key, $meta ), true, false ) . " /> <span class='at-radio-label'>" . esc_html( $value ) . "</span>";
       }
     $this->show_field_end( $field, $meta );
   }
@@ -831,7 +843,7 @@ class Tax_Meta_Class {
   public function show_field_checkbox( $field, $meta ) {
   
     $this->show_field_begin($field, $meta);
-    echo "<input type='checkbox' style='{$field['style']}' class='rw-checkbox' name='{$field['id']}' id='{$field['id']}'" . checked(!empty($meta), true, false) . " />";
+    echo "<input type='checkbox' style='" . esc_attr( $field['style'] ) . "' class='rw-checkbox' name='" . esc_attr( $field['id'] ) . "' id='" . esc_attr( $field['id'] ) . "'" . checked(!empty($meta), true, false) . " />";
     $this->show_field_end( $field, $meta );
   }
   
@@ -849,7 +861,8 @@ class Tax_Meta_Class {
     global $wp_version;
 
     if ( version_compare( $wp_version, '3.2.1' ) < 1 || $in_repeater) {
-      echo "<textarea style='{$field['style']}' class='at-wysiwyg theEditor large-text' name='{$field['id']}' id='{$field['id']}' cols='60' rows='10'>{$meta}</textarea>";
+      // $meta is already run through esc_attr() in show() before reaching this method.
+      echo "<textarea style='" . esc_attr( $field['style'] ) . "' class='at-wysiwyg theEditor large-text' name='" . esc_attr( $field['id'] ) . "' id='" . esc_attr( $field['id'] ) . "' cols='60' rows='10'>{$meta}</textarea>"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     }else{
       // Use new wp_editor() since WP 3.3
       wp_editor( stripslashes(html_entity_decode($meta)), $field['id'], array( 'editor_class' => 'at-wysiwyg' ) );
@@ -871,28 +884,28 @@ class Tax_Meta_Class {
       $meta = (array) $meta;
 
     $this->show_field_begin( $field, $meta );
-      echo "{$field['desc']}<br />";
+      echo wp_kses_post( $field['desc'] ) . "<br />";
 
       if ( !empty( $meta )  && count($meta) > 0 && !$this->is_array_empty($meta) ) {
         $nonce = wp_create_nonce( 'at_ajax_delete_file' );
-        echo '<div style="margin-bottom: 10px"><strong>' . __('Uploaded files','tax-meta') . '</strong></div>';
+        echo '<div style="margin-bottom: 10px"><strong>' . esc_html__('Uploaded files','tax-meta') . '</strong></div>';
         echo '<ol class="at-upload">';
         foreach ( $meta as $att ) {
           // if (wp_attachment_is_image($att)) continue; // what's image uploader for?
-          echo "<li>" . wp_get_attachment_link( $att, '' , false, false, ' ' ) . " (<a class='at-delete-file' href='#' rel='{$nonce}||{$field['id']}|{$att}'>" . __( 'Delete','tax-meta' ) . "</a>)</li>";
+          echo "<li>" . wp_get_attachment_link( $att, '' , false, false, ' ' ) . " (<a class='at-delete-file' href='#' rel='" . esc_attr( "{$nonce}||{$field['id']}|{$att}" ) . "'>" . esc_html__( 'Delete','tax-meta' ) . "</a>)</li>";
         }
         echo '</ol>';
       }
 
       // show form upload
     echo "<div class='at-file-upload-label'> \n
-      <strong>" . __( 'Upload new files','tax-meta' ) . "</strong>\n
+      <strong>" . esc_html__( 'Upload new files','tax-meta' ) . "</strong>\n
     </div>\n";
     echo "<div class='new-files'>\n
       <div class='file-input'>\n
-        <input type='file' name='{$field['id']}[]' />\n
+        <input type='file' name='" . esc_attr( $field['id'] ) . "[]' />\n
       </div><!-- End .file-input -->\n
-      <a class='at-add-file button' href='#'>" . __( 'Add more files','tax-meta' ) . "</a>\n
+      <a class='at-add-file button' href='#'>" . esc_html__( 'Add more files','tax-meta' ) . "</a>\n
       </div><!-- End .new-files -->\n";
     echo "</td>";
     $this->show_field_end( $field, $meta );
@@ -913,18 +926,19 @@ class Tax_Meta_Class {
       if(isset($meta[0]) && is_array($meta[0]))
       $meta = $meta[0];
     }
+    $field_id = esc_attr( $field['id'] );
     if (is_array($meta) && isset($meta['src']) && $meta['src'] != ''){
-      $html .= "<span class='mupload_img_holder'><img src='".$meta['src']."' style='height: 150px;width: 150px;' /></span>";
-      $html .= "<input type='hidden' name='".$field['id']."[id]' id='".$field['id']."[id]' value='".$meta['id']."' />";
-      $html .= "<input type='hidden' name='".$field['id']."[src]' id='".$field['id']."[src]' value='".$meta['src']."' />";
-      $html .= "<input class='at-delete_image_button' type='button' rel='".$field['id']."' value='Delete Image' />";
+      $html .= "<span class='mupload_img_holder'><img src='" . esc_url( $meta['src'] ) . "' style='height: 150px;width: 150px;' /></span>";
+      $html .= "<input type='hidden' name='{$field_id}[id]' id='{$field_id}[id]' value='" . esc_attr( $meta['id'] ) . "' />";
+      $html .= "<input type='hidden' name='{$field_id}[src]' id='{$field_id}[src]' value='" . esc_url( $meta['src'] ) . "' />";
+      $html .= "<input class='at-delete_image_button' type='button' rel='{$field_id}' value='Delete Image' />";
     }else{
       $html .= "<span class='mupload_img_holder'></span>";
-      $html .= "<input type='hidden' name='".$field['id']."[id]' id='".$field['id']."[id]' value='' />";
-      $html .= "<input type='hidden' name='".$field['id']."[src]' id='".$field['id']."[src]' value='' />";
-      $html .= "<input class='at-upload_image_button' type='button' rel='".$field['id']."' value='Upload Image' />";
+      $html .= "<input type='hidden' name='{$field_id}[id]' id='{$field_id}[id]' value='' />";
+      $html .= "<input type='hidden' name='{$field_id}[src]' id='{$field_id}[src]' value='' />";
+      $html .= "<input class='at-upload_image_button' type='button' rel='{$field_id}' value='Upload Image' />";
     }
-    echo $html;
+    echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $html is assembled from esc_url()/esc_attr()-wrapped pieces above.
     $this->show_field_end( $field, $meta );
   }
   
@@ -942,10 +956,11 @@ class Tax_Meta_Class {
       $meta = '#';
       
     $this->show_field_begin( $field, $meta );
-      echo "<input class='at-color' type='text' name='{$field['id']}' id='{$field['id']}' value='{$meta}' size='8' />";
+      // $meta is already run through esc_attr() in show() before reaching this method.
+      echo "<input class='at-color' type='text' name='" . esc_attr( $field['id'] ) . "' id='" . esc_attr( $field['id'] ) . "' value='{$meta}' size='8' />"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     //  echo "<a href='#' class='at-color-select button' rel='{$field['id']}'>" . __( 'Select a color' ) . "</a>";
-      echo "<input type='button' class='at-color-select button' rel='{$field['id']}' value='" . __( 'Select a color','tax-meta' ) . "'/>";
-      echo "<div style='display:none' class='at-color-picker' rel='{$field['id']}'></div>";
+      echo "<input type='button' class='at-color-select button' rel='" . esc_attr( $field['id'] ) . "' value='" . esc_attr__( 'Select a color','tax-meta' ) . "'/>";
+      echo "<div style='display:none' class='at-color-picker' rel='" . esc_attr( $field['id'] ) . "'></div>";
     $this->show_field_end($field, $meta);
     
   }
@@ -968,10 +983,10 @@ class Tax_Meta_Class {
       $html = array();
     
       foreach ($field['options'] as $key => $value) {
-        $html[] = "<input style='{$field['style']}' type='checkbox' class='at-checkbox_list' name='{$field['id']}[]' value='{$key}'" . checked( in_array( $key, $meta ), true, false ) . " /> {$value}";
+        $html[] = "<input style='" . esc_attr( $field['style'] ) . "' type='checkbox' class='at-checkbox_list' name='" . esc_attr( $field['id'] ) . "[]' value='" . esc_attr( $key ) . "'" . checked( in_array( $key, $meta ), true, false ) . " /> " . esc_html( $value );
       }
-    
-      echo implode( '<br />' , $html );
+
+      echo implode( '<br />' , $html ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- each $html[] entry is already escaped above.
       
     $this->show_field_end($field, $meta);
     
@@ -987,7 +1002,8 @@ class Tax_Meta_Class {
    */
   public function show_field_date( $field, $meta ) {
     $this->show_field_begin( $field, $meta );
-      echo "<input style='{$field['style']}' type='text' class='at-date' name='{$field['id']}' id='{$field['id']}' rel='{$field['format']}' value='{$meta}' size='30' />";
+      // $meta is already run through esc_attr() in show() before reaching this method.
+      echo "<input style='" . esc_attr( $field['style'] ) . "' type='text' class='at-date' name='" . esc_attr( $field['id'] ) . "' id='" . esc_attr( $field['id'] ) . "' rel='" . esc_attr( $field['format'] ) . "' value='{$meta}' size='30' />"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     $this->show_field_end( $field, $meta );
   }
   
@@ -1001,7 +1017,8 @@ class Tax_Meta_Class {
    */
   public function show_field_time( $field, $meta ) {
     $this->show_field_begin( $field, $meta );
-      echo "<input style='{$field['style']}' type='text' class='at-time' name='{$field['id']}' id='{$field['id']}' rel='{$field['format']}' value='{$meta}' size='30' />";
+      // $meta is already run through esc_attr() in show() before reaching this method.
+      echo "<input style='" . esc_attr( $field['style'] ) . "' type='text' class='at-time' name='" . esc_attr( $field['id'] ) . "' id='" . esc_attr( $field['id'] ) . "' rel='" . esc_attr( $field['format'] ) . "' value='{$meta}' size='30' />"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     $this->show_field_end( $field, $meta );
   }
   
@@ -1024,14 +1041,14 @@ class Tax_Meta_Class {
     // checkbox_list
     if ('checkbox_list' == $options['type']) {
       foreach ($posts as $p) {
-        echo "<input type='checkbox' name='{$field['id']}[]' value='$p->ID'" . checked(in_array($p->ID, $meta), true, false) . " /> $p->post_title<br/>";
+        echo "<input type='checkbox' name='" . esc_attr( $field['id'] ) . "[]' value='" . esc_attr( $p->ID ) . "'" . checked(in_array($p->ID, $meta), true, false) . " /> " . esc_html( $p->post_title ) . "<br/>";
       }
     }
     // select
     else {
-      echo "<select name='{$field['id']}" . ($field['multiple'] ? "[]' multiple='multiple' style='height:auto'" : "'") . ">";
+      echo "<select name='" . esc_attr( $field['id'] ) . "" . ($field['multiple'] ? "[]' multiple='multiple' style='height:auto'" : "'") . ">";
       foreach ($posts as $p) {
-        echo "<option value='$p->ID'" . selected(in_array($p->ID, $meta), true, false) . ">$p->post_title</option>";
+        echo "<option value='" . esc_attr( $p->ID ) . "'" . selected(in_array($p->ID, $meta), true, false) . ">" . esc_html( $p->post_title ) . "</option>";
       }
       echo "</select>";
     }
@@ -1060,14 +1077,14 @@ class Tax_Meta_Class {
     // checkbox_list
     if ('checkbox_list' == $options['type']) {
       foreach ($terms as $term) {
-        echo "<input type='checkbox' name='{$field['id']}[]' value='$term->slug'" . checked(in_array($term->slug, $meta), true, false) . " /> $term->name<br/>";
+        echo "<input type='checkbox' name='" . esc_attr( $field['id'] ) . "[]' value='" . esc_attr( $term->slug ) . "'" . checked(in_array($term->slug, $meta), true, false) . " /> " . esc_html( $term->name ) . "<br/>";
       }
     }
     // select
     else {
-      echo "<select name='{$field['id']}" . ($field['multiple'] ? "[]' multiple='multiple' style='height:auto'" : "'") . ">";
+      echo "<select name='" . esc_attr( $field['id'] ) . "" . ($field['multiple'] ? "[]' multiple='multiple' style='height:auto'" : "'") . ">";
       foreach ($terms as $term) {
-        echo "<option value='$term->slug'" . selected(in_array($term->slug, $meta), true, false) . ">$term->name</option>";
+        echo "<option value='" . esc_attr( $term->slug ) . "'" . selected(in_array($term->slug, $meta), true, false) . ">" . esc_html( $term->name ) . "</option>";
       }
       echo "</select>";
     }
