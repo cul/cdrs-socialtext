@@ -296,7 +296,11 @@ class Tax_Meta_Class {
     // If data is not set, die.
     if ( ! isset( $_POST['data'] ) )
       die();
-      
+
+    if ( ! current_user_can( 'manage_categories' ) ) {
+      die( '-1' );
+    }
+
     list($nonce, $term_id, $key, $attach_id) = explode('|', $_POST['data']);
     $term_id = $_POST['tag_id'];
     $arrKey = (int)$_POST['idx'];
@@ -375,10 +379,14 @@ class Tax_Meta_Class {
    * @access public
    */
   public function reorder_images() {
-    
+
     if ( ! isset( $_POST['data'] ) )
       die();
-      
+
+    if ( ! current_user_can( 'manage_categories' ) ) {
+      die( '-1' );
+    }
+
     list( $order, $term_id, $key, $nonce ) = explode( '|', $_POST['data'] );
     
     if ( ! wp_verify_nonce( $nonce, 'at_ajax_reorder' ) )
