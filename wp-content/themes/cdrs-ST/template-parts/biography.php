@@ -23,7 +23,7 @@
 	if ( $userdata->display_name ) echo esc_html( $userdata->display_name );
 
 	echo '</h2><p class="author-bio">';
-	if ( $userdata->user_description ) echo esc_html( $userdata->user_description );
+	if ( $userdata->user_description ) echo wp_kses_post( $userdata->user_description );
 
 	echo '</p></div></div><br>';
 

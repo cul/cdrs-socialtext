@@ -54,7 +54,7 @@ get_header(); ?>
 		<div class="article-no-image">
 			<div class="article-no-image-content">	
 	<?php } ?>
-				<?php echo '<p>' . esc_html( $curauth->user_description ) . '</p>';
+				<?php echo '<p>' . wp_kses_post( $curauth->user_description ) . '</p>';
 				if ( $curauth->user_url != '' ) { ?>
 				<p class="weblink"><em>Website:</em> &nbsp;<a href="<?php echo esc_url( $curauth->user_url ); ?>"><?php echo esc_html( $curauth->user_url ); ?></a></p>
 				<?php } ?>
